@@ -1,0 +1,7 @@
+{
+  "name": "BeyondFM",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
