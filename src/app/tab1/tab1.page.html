@@ -13,5 +13,16 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-card *ngIf="radioStation">
+    <ion-card-header>
+      <ion-card-title>{{ radioStation.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ radioStation.country }}</p>
+      <p><strong>Stream:</strong><a href="{{ radioStation.url }}"></a> {{ radioStation.url }}</p>
+      <ion-button (click)="playRadio()">Play</ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>
