@@ -12,7 +12,7 @@ import {
 } from "@ionic/angular/standalone";
 
 import { addIcons } from 'ionicons';
-import { playOutline } from 'ionicons/icons';
+import { playOutline, pauseOutline } from 'ionicons/icons';
 import {ExploreContainerComponent} from "../explore-container/explore-container.component";
 import {NgIf} from "@angular/common";
 import {StreamingService} from "../services/streaming.service";
@@ -29,7 +29,7 @@ export class Tab1Page implements OnInit {
   audio: HTMLAudioElement | null = null;
 
   constructor(private radioBrowserService: RadioBrowserService, private streamingService: StreamingService) {
-    addIcons({ playOutline });
+    addIcons({ playOutline, pauseOutline });
   }
 
   ngOnInit() {
@@ -58,7 +58,16 @@ export class Tab1Page implements OnInit {
   }
 
   radioInteract(url: string) {
+    if(!this.isPlaying()){
       this.streamingService.playStream(url);
+    } else {
+      this.streamingService.pauseStream();
+    }
+
+  }
+
+  isPlaying(){
+    return this.streamingService.isPlaying();
   }
 
 }
