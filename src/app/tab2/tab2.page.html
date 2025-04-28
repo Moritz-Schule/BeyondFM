@@ -13,10 +13,23 @@
     </ion-toolbar>
   </ion-header>
 
-    <ion-item>
-      <ion-input labelPlacement="stacked" label="Search" placeholder="What do you want to listen to?">
-        <ion-icon slot="start" name="search-outline" aria-hidden="true"></ion-icon>
-      </ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-input
+      labelPlacement="stacked"
+      label="Search"
+      [(ngModel)]="searchTerm"
+      placeholder="What do you want to listen to?"
+      (ionInput)="onSearch()"
+      type="text"
+      clear-input="true"
+    >
+      <ion-icon slot="start" name="search-outline" aria-hidden="true"></ion-icon>
+    </ion-input>
+  </ion-item>
+
+  <!-- Hier können Sie die Suchergebnisse anzeigen -->
+  <div *ngIf="searchResults.length > 0">
+    <!-- Implementieren Sie hier Ihre Ergebnisliste -->
+  </div>
 
 </ion-content>
