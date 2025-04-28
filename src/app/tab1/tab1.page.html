@@ -21,9 +21,9 @@
       <p>{{ radioStation.country }}</p>
       <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p>
       <ion-button (click)="radioInteract(radioStation.url)" shape="round">
-        <ion-icon *ngIf="isPlaying(); else elseBlock" name="play-outline"></ion-icon>
+        <ion-icon *ngIf="isPlaying(); else elseBlock" name="pause-outline"></ion-icon>
         <ng-template #elseBlock>
-          <ion-icon name="pause-outline"></ion-icon>
+          <ion-icon name="play-outline"></ion-icon>
         </ng-template>
       </ion-button>
 
