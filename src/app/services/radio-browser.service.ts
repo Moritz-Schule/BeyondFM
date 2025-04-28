@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +112,38 @@ export class RadioBrowserService {
         }
         const randomIndex = Math.floor(Math.random() * stations.length);
         return stations[randomIndex];
+      })
+    );
+  }
+
+  /**
+   * Sucht nach Radiosendern basierend auf einem Suchbegriff.
+   * @param searchTerm - Der Suchbegriff für die Radiosuche
+   * @returns Observable<any[]> - Eine Liste der gefundenen Radiosender
+   */
+  getSearchResults(searchTerm: string): Observable<any[]> {
+    if (!this.serverUrl) {
+      // Wenn keine Server-URL gesetzt ist, zuerst einen Server abrufen
+      return this.getRadiobrowserBaseUrlRandom().pipe(
+        switchMap(baseUrl => {
+          const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
+          const url = `${baseUrl}/json/stations/byname/${encodedSearchTerm}`;
+          return this.http.get<any[]>(url);
+        }),
+        catchError(error => {
+          console.error("Fehler beim Abrufen der Radiosender:", error);
+          return of([]);
+        })
+      );
+    }
+
+    const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
+    const url = `${this.serverUrl}/json/stations/byname/${encodedSearchTerm}`;
+
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error("Fehler beim Abrufen der Radiosender:", error);
+        return of([]);
       })
     );
   }

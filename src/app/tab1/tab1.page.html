@@ -12,12 +12,13 @@
       <app-header/>
     </ion-toolbar>
   </ion-header>
-  <h5>Playing from Library: <br>
-  <span>{{ radioStation.name }}</span></h5>
   <ion-card *ngIf="radioStation">
     <ion-card-header>
       <ion-card-title></ion-card-title>
     </ion-card-header>
+    <h5>Playing from Library: <br>
+      <span>{{ radioStation.name }}</span></h5>
+    <img *ngIf="radioStation.favicon" src="{{radioStation.favicon}}" alt="Logo von {{ radioStation.name }}">
     <ion-card-content>
       <p>{{ radioStation.name }}  -   {{ radioStation.country }}</p>
       <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
