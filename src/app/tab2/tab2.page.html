@@ -1,35 +1,49 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Radiosender Suche</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content>
   <ion-item>
     <ion-input
-      labelPlacement="stacked"
-      label="Search"
       [(ngModel)]="searchTerm"
-      placeholder="What do you want to listen to?"
+      placeholder="Sender suchen..."
       (ionInput)="onSearch()"
       type="text"
       clear-input="true"
     >
-      <ion-icon slot="start" name="search-outline" aria-hidden="true"></ion-icon>
+      <ion-icon slot="start" name="search-outline"></ion-icon>
     </ion-input>
   </ion-item>
 
-  <!-- Hier können Sie die Suchergebnisse anzeigen -->
-  <div *ngIf="searchResults.length > 0">
-    <!-- Implementieren Sie hier Ihre Ergebnisliste -->
+  <!-- Lade-Anzeige -->
+  <div class="ion-text-center ion-padding" *ngIf="isLoading">
+    <ion-spinner name="circular"></ion-spinner>
+    <p>Suche läuft...</p>
   </div>
 
+  <!-- Keine Ergebnisse -->
+  <div class="ion-text-center ion-padding" *ngIf="!isLoading && searchTerm && searchResults.length === 0">
+    <ion-icon name="radio-outline" size="large"></ion-icon>
+    <p>Keine Sender gefunden</p>
+  </div>
+
+  <!-- Ergebnisliste -->
+  <ion-list *ngIf="!isLoading && searchResults.length > 0">
+    <ion-item *ngFor="let station of searchResults" button detail>
+      <ion-thumbnail slot="start">
+        <img [src]="station.favicon || ''"
+             [alt]="station.name"
+             onError="this.src=''">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ station.name }}</h2>
+        <p>{{ station.country }}</p>
+        <p class="ion-text-wrap">
+          <small>{{ formatTags(station.tags) }}</small>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
