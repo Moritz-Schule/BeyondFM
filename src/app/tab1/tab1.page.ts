@@ -10,18 +10,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/angular/standalone";
-
+import { HeaderComponent } from "../header/header.component";
 import { addIcons } from 'ionicons';
 import { playOutline, pauseOutline } from 'ionicons/icons';
 import {ExploreContainerComponent} from "../explore-container/explore-container.component";
 import {NgIf} from "@angular/common";
 import {StreamingService} from "../services/streaming.service";
-
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, NgIf, IonIcon]
+  standalone: true,
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, NgIf, IonIcon, HeaderComponent]
 })
 export class Tab1Page implements OnInit {
   serverUrl: string = '';
