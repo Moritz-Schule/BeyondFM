@@ -82,7 +82,7 @@ export class Tab1Page implements OnInit {
 
   handleImageError(event: any) {
     const img = event.target;
-    if (img.naturalWidth < 48 || img.naturalHeight < 48) {
+    if (img.naturalWidth < 100 || img.naturalHeight < 100) {
       img.src = './assets/radio-placeholder.jpg';
     }
   }
