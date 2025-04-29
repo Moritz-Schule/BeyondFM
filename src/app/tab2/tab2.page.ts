@@ -17,6 +17,9 @@ import { searchOutline, radioOutline, chevronForward, chevronBack } from 'ionico
 import {RadioBrowserService} from "../services/radio-browser.service";
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
+import { Router } from '@angular/router';
+import { StreamingService } from '../services/streaming.service';
+
 
 @Component({
   selector: 'app-tab2',
@@ -47,7 +50,11 @@ export class Tab2Page {
   searchResults: any[] = [];
   isLoading: boolean = false;
 
-  constructor(private radioBrowserService: RadioBrowserService) {
+  constructor(
+    private radioBrowserService: RadioBrowserService,
+    private router: Router,
+    private streamingService: StreamingService
+  ) {
     addIcons({
       searchOutline,
       radioOutline,
@@ -80,6 +87,11 @@ export class Tab2Page {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+  }
+
+  onStationClick(station: any) {
+    this.streamingService.setCurrentStation(station);
+    this.router.navigate(['/tabs/tab1']);
   }
 
 

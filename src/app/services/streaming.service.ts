@@ -4,10 +4,19 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StreamingService {
-
+  private currentStation: any = null;
   private audio: HTMLAudioElement = new Audio();
 
   constructor() {}
+
+  setCurrentStation(station: any) {
+    this.currentStation = station;
+  }
+
+  getCurrentStation() {
+    return this.currentStation;
+  }
+
 
   playStream(url: string) {
     this.audio.src = url;

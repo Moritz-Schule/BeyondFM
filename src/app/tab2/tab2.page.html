@@ -31,7 +31,8 @@
 
   <!-- Ergebnisliste mit Paginierung -->
   <ion-list *ngIf="!isLoading && searchResults.length > 0">
-    <ion-item *ngFor="let station of paginatedResults" button detail>
+    <!-- Ändern Sie das ion-item in der Liste wie folgt: -->
+    <ion-item *ngFor="let station of paginatedResults" button detail (click)="onStationClick(station)">
       <ion-thumbnail slot="start">
         <img [src]="station.favicon || './assets/radio-placeholder.jpg'"
              [alt]="station.name">

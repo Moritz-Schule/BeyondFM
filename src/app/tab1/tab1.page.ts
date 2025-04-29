@@ -31,6 +31,14 @@ export class Tab1Page implements OnInit {
     addIcons({ playOutline, pauseOutline });
   }
 
+  ionViewWillEnter() {
+    // Prüfen und Aktualisieren der Station beim Betreten der Seite
+    const selectedStation = this.streamingService.getCurrentStation();
+    if (selectedStation) {
+      this.radioStation = selectedStation;
+    }
+  }
+
   ngOnInit() {
     this.serverUrl = this.radioBrowserService.getServerUrl();
 
@@ -38,9 +46,12 @@ export class Tab1Page implements OnInit {
       this.radioBrowserService.getRadiobrowserBaseUrlRandom().subscribe(url => {
         this.radioBrowserService.setServerUrl(url);
         this.serverUrl = url;
-        this.loadRandomStation();
+        // Nur eine zufällige Station laden, wenn keine ausgewählte Station existiert
+        if (!this.streamingService.getCurrentStation()) {
+          this.loadRandomStation();
+        }
       });
-    } else {
+    } else if (!this.streamingService.getCurrentStation()) {
       this.loadRandomStation();
     }
   }
