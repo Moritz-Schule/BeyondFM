@@ -17,16 +17,14 @@
     </ion-input>
   </ion-item>
 
-  <!-- Lade-Anzeige -->
   <div class="ion-text-center ion-padding" *ngIf="isLoading">
-    <ion-spinner name="circular"></ion-spinner>
-    <p>Suche läuft...</p>
+    <ion-spinner name="dots"></ion-spinner>
+    <p>Searching...</p>
   </div>
 
-  <!-- Keine Ergebnisse -->
   <div class="ion-text-center ion-padding" *ngIf="!isLoading && searchTerm && searchResults.length === 0">
     <ion-icon name="radio-outline" size="large"></ion-icon>
-    <p>Keine Sender gefunden</p>
+    <p>No stations found 🙁</p>
   </div>
 
   <!-- Ergebnisliste -->

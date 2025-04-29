@@ -22,10 +22,10 @@
     <ion-card-content>
       <p>{{ radioStation.name }}  -   {{ radioStation.country }}</p>
       <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
-      <ion-button (click)="radioInteract(radioStation.url)" shape="round">
-        <ion-icon *ngIf="isPlaying(); else elseBlock" name="play-outline"></ion-icon>
+      <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
+        <ion-icon *ngIf="isPlaying(); else elseBlock" name="play-outline" color="dark"></ion-icon>
         <ng-template #elseBlock>
-          <ion-icon name="pause-outline"></ion-icon>
+          <ion-icon name="pause-outline" color="dark"></ion-icon>
         </ng-template>
       </ion-button>
 
