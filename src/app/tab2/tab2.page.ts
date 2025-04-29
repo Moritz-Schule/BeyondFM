@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -10,11 +10,10 @@ import {
   IonList,
   IonLabel,
   IonThumbnail,
-  IonSkeletonText,
-  IonSpinner
+  IonSpinner, IonFooter, IonButtons, IonButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { searchOutline, radioOutline } from 'ionicons/icons';
+import { searchOutline, radioOutline, chevronForward, chevronBack } from 'ionicons/icons';
 import {RadioBrowserService} from "../services/radio-browser.service";
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
@@ -37,7 +36,10 @@ import { NgIf, NgFor } from '@angular/common';
     IonSpinner,
     FormsModule,
     NgIf,
-    NgFor
+    NgFor,
+    IonFooter,
+    IonButtons,
+    IonButton
   ]
 })
 export class Tab2Page {
@@ -48,13 +50,43 @@ export class Tab2Page {
   constructor(private radioBrowserService: RadioBrowserService) {
     addIcons({
       searchOutline,
-      radioOutline
+      radioOutline,
+      chevronForward,
+      chevronBack
     });
   }
+
+  // Paginierung
+  itemsPerPage: number = 25;
+  currentPage: number = 1;
+
+  get totalPages(): number {
+    return Math.ceil(this.searchResults.length / this.itemsPerPage);
+  }
+
+  get paginatedResults(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.searchResults.slice(startIndex, endIndex);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
 
   onSearch() {
     if (this.searchTerm.trim()) {
       this.isLoading = true;
+      this.currentPage = 1;
       this.radioBrowserService.getSearchResults(this.searchTerm).subscribe(
         results => {
           this.searchResults = results;

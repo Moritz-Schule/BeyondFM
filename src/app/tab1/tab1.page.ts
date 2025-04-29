@@ -13,7 +13,6 @@ import {
 import { HeaderComponent } from "../header/header.component";
 import { addIcons } from 'ionicons';
 import { playOutline, pauseOutline } from 'ionicons/icons';
-import {ExploreContainerComponent} from "../explore-container/explore-container.component";
 import {NgIf} from "@angular/common";
 import {StreamingService} from "../services/streaming.service";
 @Component({
@@ -68,6 +67,13 @@ export class Tab1Page implements OnInit {
 
   isPlaying(){
     return this.streamingService.isPlaying();
+  }
+
+  handleImageError(event: any) {
+    const img = event.target;
+    if (img.naturalWidth < 48 || img.naturalHeight < 48) {
+      img.src = './assets/radio-placeholder.jpg';
+    }
   }
 
 }

@@ -18,7 +18,9 @@
     </ion-card-header>
     <h5>Playing from Library: <br>
       <span>{{ radioStation.name }}</span></h5>
-    <img *ngIf="radioStation.favicon" src="{{radioStation.favicon}}" alt="Logo von {{ radioStation.name }}">
+    <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
+     [alt]="'Logo von ' + radioStation.name"
+     (error)="handleImageError($event)">
     <ion-card-content>
       <p>{{ radioStation.name }}  -   {{ radioStation.country }}</p>
       <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
