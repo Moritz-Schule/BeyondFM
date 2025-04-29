@@ -7,8 +7,8 @@ ion-header{
 
 
 h5{
-  font-family: ABeeZee, serif;
-  color: black;
+
+  color: white;
   span{
     color: #FF0900;
     font-size: 16px;
@@ -18,8 +18,8 @@ h5{
 ion-card-content{
   p{
 
-    color: black;
-    font-family: ABeeZee, serif;
+
+
     font-size: 28px;
 
   }
@@ -38,3 +38,35 @@ ion-button {
 }
 
 
+.image-wrapper {
+  width: 300px;               /* feste Breite */
+  margin: 0 auto;             /* zentriert auf der Seite */
+  background-color: white;     /* Balkenfarbe (optional) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 42px;
+}
+
+.image-wrapper img {
+  max-width: 100%;            /* passt in die Breite */
+  height: auto;               /* behält Seitenverhältnis */
+  display: block;
+}
+ion-card{
+  width: 360px;
+  height: 660px;
+  justify-content: center;
+  background-color: black;
+}
+.radioName{
+  position: fixed;
+  bottom: 120px;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  background-color: black;
+}

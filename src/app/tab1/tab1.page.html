@@ -18,11 +18,15 @@
     </ion-card-header>
     <h5>Playing from Library: <br>
       <span>{{ radioStation.name }}</span></h5>
+    <div class="image-wrapper">
     <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
      [alt]="'Logo von ' + radioStation.name"
      (error)="handleImageError($event)">
+    </div>
     <ion-card-content>
-      <p>{{ radioStation.name }}  -   {{ radioStation.country }}</p>
+      <div class="radioName">
+      <p>{{ radioStation.name }}</p>
+
       <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
       <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
         <ion-icon *ngIf="isPlaying(); else elseBlock" name="play-outline" color="dark"></ion-icon>
@@ -30,7 +34,7 @@
           <ion-icon name="pause-outline" color="dark"></ion-icon>
         </ng-template>
       </ion-button>
-
+      </div>
     </ion-card-content>
   </ion-card>
 </ion-content>
