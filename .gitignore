@@ -68,3 +68,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# .gitignore
+*.sqlite
+*.sqlite3
+*.db

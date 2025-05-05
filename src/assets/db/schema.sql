@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS favorites (
+    stationuuid TEXT PRIMARY KEY,
+    favorite INTEGER DEFAULT 1,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
