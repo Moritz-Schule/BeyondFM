@@ -12,7 +12,7 @@ import {
 } from "@ionic/angular/standalone";
 import { HeaderComponent } from "../header/header.component";
 import { addIcons } from 'ionicons';
-import { playOutline, pauseOutline } from 'ionicons/icons';
+import {playOutline, pauseOutline, heartOutline} from 'ionicons/icons';
 import {NgIf} from "@angular/common";
 import {StreamingService} from "../services/streaming.service";
 @Component({
@@ -28,7 +28,7 @@ export class Tab1Page implements OnInit {
   audio: HTMLAudioElement | null = null;
 
   constructor(private radioBrowserService: RadioBrowserService, private streamingService: StreamingService) {
-    addIcons({ playOutline, pauseOutline });
+    addIcons({ playOutline, pauseOutline, heartOutline });
   }
 
   ionViewWillEnter() {
