@@ -10,7 +10,7 @@ import {
   IonList,
   IonLabel,
   IonThumbnail,
-  IonSpinner, IonFooter, IonButtons, IonButton
+  IonSpinner, IonFooter, IonButtons, IonButton, IonSelect, IonSelectOption
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { searchOutline, radioOutline, chevronForward, chevronBack } from 'ionicons/icons';
@@ -42,13 +42,16 @@ import { StreamingService } from '../services/streaming.service';
     NgFor,
     IonFooter,
     IonButtons,
-    IonButton
+    IonButton,
+    IonSelect,
+    IonSelectOption
   ]
 })
 export class Tab2Page {
   searchTerm: string = '';
   searchResults: any[] = [];
   isLoading: boolean = false;
+  sortOrder: string = 'name';
 
   constructor(
     private radioBrowserService: RadioBrowserService,
@@ -94,12 +97,15 @@ export class Tab2Page {
     this.router.navigate(['/tabs/tab1']);
   }
 
+  onSortChange() {
+    this.onSearch(); // Neue Suche mit aktualisierter Sortierung
+  }
 
   onSearch() {
     if (this.searchTerm.trim()) {
       this.isLoading = true;
       this.currentPage = 1;
-      this.radioBrowserService.getSearchResults(this.searchTerm).subscribe(
+      this.radioBrowserService.getSearchResults(this.searchTerm, this.sortOrder).subscribe(
         results => {
           this.searchResults = results;
           this.isLoading = false;

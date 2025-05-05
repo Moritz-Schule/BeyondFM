@@ -19,6 +19,21 @@
     </ion-input>
   </ion-item>
 
+<ion-item>
+  <ion-select
+    [(ngModel)]="sortOrder"
+    (ionChange)="onSortChange()"
+    interface="popover"
+    placeholder="Sortieren nach..."
+  >
+    <ion-select-option value="name">Name</ion-select-option>
+    <ion-select-option value="votes">Bewertungen</ion-select-option>
+    <ion-select-option value="clickcount">Popularität</ion-select-option>
+    <ion-select-option value="bitrate">Bitrate</ion-select-option>
+    <ion-select-option value="country">Land</ion-select-option>
+  </ion-select>
+</ion-item>
+
   <div class="ion-text-center ion-padding" *ngIf="isLoading">
     <ion-spinner name="dots"></ion-spinner>
     <p>Searching...</p>

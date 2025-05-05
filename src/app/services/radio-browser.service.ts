@@ -122,14 +122,20 @@ export class RadioBrowserService {
    * @param searchTerm - Der Suchbegriff für die Radiosuche
    * @returns Observable<any[]> - Eine Liste der gefundenen Radiosender
    */
-  getSearchResults(searchTerm: string): Observable<any[]> {
+  getSearchResults(searchTerm: string, sortOrder: string = 'name'): Observable<any[]> {
     if (!this.serverUrl) {
-      // Wenn keine Server-URL gesetzt ist, zuerst einen Server abrufen
       return this.getRadiobrowserBaseUrlRandom().pipe(
         switchMap(baseUrl => {
           const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
-          const url = `${baseUrl}/json/stations/byname/${encodedSearchTerm}`;
-          return this.http.get<any[]>(url);
+          const url = `${baseUrl}/json/stations/search`;
+          return this.http.get<any[]>(url, {
+            params: {
+              name: encodedSearchTerm,
+              order: sortOrder,
+              reverse: 'false',
+              limit: '100'
+            }
+          });
         }),
         catchError(error => {
           console.error("Fehler beim Abrufen der Radiosender:", error);
@@ -139,9 +145,16 @@ export class RadioBrowserService {
     }
 
     const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
-    const url = `${this.serverUrl}/json/stations/byname/${encodedSearchTerm}`;
+    const url = `${this.serverUrl}/json/stations/search`;
 
-    return this.http.get<any[]>(url).pipe(
+    return this.http.get<any[]>(url, {
+      params: {
+        name: encodedSearchTerm,
+        order: sortOrder,
+        reverse: 'false',
+        limit: '100'
+      }
+    }).pipe(
       catchError(error => {
         console.error("Fehler beim Abrufen der Radiosender:", error);
         return of([]);
