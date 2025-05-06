@@ -1,7 +1,8 @@
 ion-title {
   text-align: center;
-}
 
+}
+//flex-direction: inherit;
 ion-header {
   background-color: black;
 }
@@ -36,6 +37,8 @@ ion-button {
   background-color: #FF0900;
   --padding-start: 0;
   --padding-end: 0;
+  margin-left: 130px;
+
 }
 
 ion-button ion-icon {
@@ -89,6 +92,7 @@ ion-card {
 
 .all {
   background-color: black;
+
 }
 
 ion-header {
@@ -104,10 +108,11 @@ ion-header {
 .herz {
   height: 40px;
   width: 60px;
-  margin-left: 250px;
-  margin-top: 0px;
-
+  margin-left: 0px;
+  margin-top: 0;
+  margin-right: 30px;
 }
+
 
 .pulse-dot {
   width: 10px;
@@ -137,6 +142,17 @@ ion-header {
 .dotName {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
+
+.herzButt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0px;
+  margin-top: 25px;
+}
 

@@ -28,16 +28,17 @@
           <p>{{ radioStation.name }}</p>
         </div>
         <div class="herzButt">
-        <div class="herz">
-          <ion-icon size="large" color="danger" name="heart-outline"></ion-icon>
-        </div>
-        <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
-        <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
+          <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
           <ion-icon *ngIf="isPlaying(); else elseBlock" name="pause-outline" color="dark"></ion-icon>
           <ng-template #elseBlock>
             <ion-icon name="play-outline" color="dark"></ion-icon>
           </ng-template>
         </ion-button>
+        <div class="herz">
+          <ion-icon size="large" color="danger" name="heart-outline"></ion-icon>
+        </div>
+
+
         </div>
       </div>
     </ion-card-content>
