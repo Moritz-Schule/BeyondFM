@@ -17,8 +17,8 @@ export class RadioBrowserService {
    * @returns Observable<string[]> - Eine Liste von Server-URLs.
    */
   getRadiobrowserBaseUrls(): Observable<string[]> {
-    //const url = 'https://all.api.radio-browser.info/json/servers';
-    const url = 'https://de1.api.radio-browser.info/json/servers';
+    const url = 'https://all.api.radio-browser.info/json/servers';
+    //const url = 'https://de1.api.radio-browser.info/json/servers';
     return this.http.get<any[]>(url).pipe(
       map((response) => {
         return response.map(x => 'https://' + x.name);
@@ -133,7 +133,8 @@ export class RadioBrowserService {
               name: encodedSearchTerm,
               order: sortOrder,
               reverse: 'false',
-              limit: '100'
+              limit: '100',
+              codec: 'mp3'  // Hier fügen wir den Codec-Parameter hinzu
             }
           });
         }),
@@ -152,7 +153,8 @@ export class RadioBrowserService {
         name: encodedSearchTerm,
         order: sortOrder,
         reverse: 'false',
-        limit: '100'
+        limit: '100',
+        codec: 'mp3'  // Hier fügen wir den Codec-Parameter auch für den Fall hinzu, dass serverUrl gesetzt ist
       }
     }).pipe(
       catchError(error => {
