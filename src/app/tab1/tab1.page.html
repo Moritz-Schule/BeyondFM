@@ -1,7 +1,7 @@
 <div class="all">
-<ion-header [translucent]="true">
+  <ion-header [translucent]="true">
 
-</ion-header>
+  </ion-header>
 
 
   <ion-header collapse="condense">
@@ -9,32 +9,36 @@
       <app-header/>
     </ion-toolbar>
   </ion-header>
-  <ion-card *ngIf="radioStation" >
+  <ion-card *ngIf="radioStation">
     <ion-card-header>
       <ion-card-title></ion-card-title>
     </ion-card-header>
     <h5>Playing from Library: <br>
       <span>{{ radioStation.name }}</span></h5> <br> <br>
     <div class="image-wrapper">
-    <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
-     [alt]="'Logo von ' + radioStation.name"
-     (error)="handleImageError($event)">
+      <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
+           [alt]="'Logo von ' + radioStation.name"
+           (error)="handleImageError($event)">
     </div>
     <ion-card-content>
 
       <div class="radioName">
-        <div class="pulse-dot"></div><p>{{ radioStation.name }}</p>
-
-        <div class="herz">
-        <ion-icon size ="large" color="danger" name="heart-outline"></ion-icon>
+        <div class="dotName">
+          <div class="pulse-dot"></div>
+          <p>{{ radioStation.name }}</p>
         </div>
-      <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
-      <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
-        <ion-icon *ngIf="isPlaying(); else elseBlock" name="pause-outline" color="dark"></ion-icon>
-        <ng-template #elseBlock>
-          <ion-icon name="play-outline" color="dark"></ion-icon>
-        </ng-template>
-      </ion-button>
+        <div class="herzButt">
+        <div class="herz">
+          <ion-icon size="large" color="danger" name="heart-outline"></ion-icon>
+        </div>
+        <!-- <p><strong>Externer Stream:</strong><a href="{{ radioStation.url }}" target="_blank"> {{ radioStation.url }}</a></p> -->
+        <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">
+          <ion-icon *ngIf="isPlaying(); else elseBlock" name="pause-outline" color="dark"></ion-icon>
+          <ng-template #elseBlock>
+            <ion-icon name="play-outline" color="dark"></ion-icon>
+          </ng-template>
+        </ion-button>
+        </div>
       </div>
     </ion-card-content>
   </ion-card>
