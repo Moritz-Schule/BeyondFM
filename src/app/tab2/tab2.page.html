@@ -6,8 +6,16 @@
   </ion-toolbar>
 </ion-header>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap" rel="stylesheet" />
+
 <ion-content>
-  <ion-item>
+
+
+
+
+  <div class="search-bar">
     <ion-input
       [(ngModel)]="searchTerm"
       placeholder="Sender suchen..."
@@ -15,51 +23,54 @@
       type="text"
       clear-input="true"
     >
-      <ion-icon slot="start" name="search-outline"></ion-icon>
     </ion-input>
-  </ion-item>
+  </div>
 
-<ion-item>
-  <ion-select
-    [(ngModel)]="sortOrder"
-    (ionChange)="onSortChange()"
-    interface="popover"
-    placeholder="Sortieren nach..."
-    style="flex-grow: 1;"
-  >
-    <ion-select-option value="name">Name</ion-select-option>
-    <ion-select-option value="votes">Votes</ion-select-option>
-    <ion-select-option value="clickcount">Popularity</ion-select-option>
-    <ion-select-option value="bitrate">Bitrate</ion-select-option>
-    <ion-select-option value="country">Country</ion-select-option>
-  </ion-select>
 
-  <ion-buttons slot="end">
-    <ion-button
-      [color]="sortDirection === 'asc' ? 'primary' : 'medium'"
-      (click)="sortDirection = 'asc'; onSortDirectionChange()">
-      <ion-icon name="arrow-up"></ion-icon>
-    </ion-button>
-    <ion-button
-      [color]="sortDirection === 'desc' ? 'primary' : 'medium'"
-      (click)="sortDirection = 'desc'; onSortDirectionChange()">
-      <ion-icon name="arrow-down"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-</ion-item>
+  <div class="sort-bar">
+    <ion-select
+      [(ngModel)]="sortOrder"
+      (ionChange)="onSortChange()"
+      interface="popover"
+      placeholder="Sortieren nach..."
+    >
+      <ion-select-option value="name">Name</ion-select-option>
+      <ion-select-option value="votes">Votes</ion-select-option>
+      <ion-select-option value="clickcount">Popularity</ion-select-option>
+      <ion-select-option value="bitrate">Bitrate</ion-select-option>
+      <ion-select-option value="country">Country</ion-select-option>
+    </ion-select>
+
+    <ion-buttons slot="end">
+      <ion-button
+        [color]="sortDirection === 'asc' ? 'primary' : 'medium'"
+        (click)="sortDirection = 'asc'; onSortDirectionChange()"
+      >
+        <ion-icon name="arrow-up"></ion-icon>
+      </ion-button>
+      <ion-button
+        [color]="sortDirection === 'desc' ? 'primary' : 'medium'"
+        (click)="sortDirection = 'desc'; onSortDirectionChange()"
+      >
+        <ion-icon name="arrow-down"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+
 
   <div class="ion-text-center ion-padding" *ngIf="isLoading">
     <ion-spinner name="dots"></ion-spinner>
     <p>Searching...</p>
   </div>
 
+
   <div class="ion-text-center ion-padding" *ngIf="!isLoading && searchTerm && searchResults.length === 0">
     <ion-icon name="radio-outline" size="large"></ion-icon>
     <p>No stations found 🙁</p>
   </div>
 
-  <!-- Ergebnisliste mit Paginierung -->
-  <ion-list *ngIf="!isLoading && searchResults.length > 0">
+
+  <div *ngIf="!isLoading && searchResults.length > 0">
     <div *ngFor="let station of paginatedResults; let i = index" class="station-card" (click)="onStationClick(station)">
       <div class="rank-number">{{ i + 1 }}.</div>
       <img class="station-logo" [src]="station.favicon || './assets/radio-placeholder.jpg'" [alt]="station.name" />
@@ -69,10 +80,9 @@
         <small>{{ formatTags(station.tags) }}</small>
       </div>
     </div>
-  </ion-list>
+  </div>
 
 
-  <!-- Paginierung -->
   <ion-footer *ngIf="!isLoading && searchResults.length > itemsPerPage">
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -89,3 +99,4 @@
     </ion-toolbar>
   </ion-footer>
 </ion-content>
+
