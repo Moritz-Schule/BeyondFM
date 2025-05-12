@@ -120,9 +120,14 @@ export class RadioBrowserService {
   /**
    * Sucht nach Radiosendern basierend auf einem Suchbegriff.
    * @param searchTerm - Der Suchbegriff für die Radiosuche
+   * @param sortOrder - Das Sortierfeld (z.B. 'name', 'bitrate', 'votes')
+   * @param sortDirection - Die Sortierrichtung ('asc' für aufsteigend, 'desc' für absteigend)
    * @returns Observable<any[]> - Eine Liste der gefundenen Radiosender
    */
-  getSearchResults(searchTerm: string, sortOrder: string = 'name'): Observable<any[]> {
+  getSearchResults(searchTerm: string, sortOrder: string = 'name', sortDirection: string = 'asc'): Observable<any[]> {
+    // Umwandlung der Sortierrichtung in einen booleschen Wert für den API-Aufruf
+    const isReverse = sortDirection === 'desc' ? 'true' : 'false';
+
     if (!this.serverUrl) {
       return this.getRadiobrowserBaseUrlRandom().pipe(
         switchMap(baseUrl => {
@@ -132,9 +137,9 @@ export class RadioBrowserService {
             params: {
               name: encodedSearchTerm,
               order: sortOrder,
-              reverse: 'false',
+              reverse: isReverse,
               limit: '100',
-              codec: 'mp3'  // Hier fügen wir den Codec-Parameter hinzu
+              codec: 'mp3'
             }
           });
         }),
@@ -152,9 +157,9 @@ export class RadioBrowserService {
       params: {
         name: encodedSearchTerm,
         order: sortOrder,
-        reverse: 'false',
+        reverse: isReverse,
         limit: '100',
-        codec: 'mp3'  // Hier fügen wir den Codec-Parameter auch für den Fall hinzu, dass serverUrl gesetzt ist
+        codec: 'mp3'
       }
     }).pipe(
       catchError(error => {

@@ -13,7 +13,7 @@ import {
   IonSpinner, IonFooter, IonButtons, IonButton, IonSelect, IonSelectOption
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { searchOutline, radioOutline, chevronForward, chevronBack } from 'ionicons/icons';
+import { searchOutline, radioOutline, chevronForward, chevronBack, arrowUp, arrowDown } from 'ionicons/icons';
 import {RadioBrowserService} from "../services/radio-browser.service";
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
@@ -52,6 +52,9 @@ export class Tab2Page {
   searchResults: any[] = [];
   isLoading: boolean = false;
   sortOrder: string = 'name';
+  sortDirection: string = 'asc'; // Neue Eigenschaft für die Sortierrichtung
+
+  // Rest des Codes bleibt unverändert
 
   constructor(
     private radioBrowserService: RadioBrowserService,
@@ -62,7 +65,9 @@ export class Tab2Page {
       searchOutline,
       radioOutline,
       chevronForward,
-      chevronBack
+      chevronBack,
+      arrowUp,
+      arrowDown
     });
   }
 
@@ -101,11 +106,15 @@ export class Tab2Page {
     this.onSearch(); // Neue Suche mit aktualisierter Sortierung
   }
 
+  onSortDirectionChange() {
+    this.onSearch(); // Neue Suche mit aktualisierter Sortierrichtung
+  }
+
   onSearch() {
     if (this.searchTerm.trim()) {
       this.isLoading = true;
       this.currentPage = 1;
-      this.radioBrowserService.getSearchResults(this.searchTerm, this.sortOrder).subscribe(
+      this.radioBrowserService.getSearchResults(this.searchTerm, this.sortOrder, this.sortDirection).subscribe(
         results => {
           this.searchResults = results;
           this.isLoading = false;

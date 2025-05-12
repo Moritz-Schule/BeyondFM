@@ -25,6 +25,7 @@
     (ionChange)="onSortChange()"
     interface="popover"
     placeholder="Sortieren nach..."
+    style="flex-grow: 1;"
   >
     <ion-select-option value="name">Name</ion-select-option>
     <ion-select-option value="votes">Votes</ion-select-option>
@@ -32,6 +33,19 @@
     <ion-select-option value="bitrate">Bitrate</ion-select-option>
     <ion-select-option value="country">Country</ion-select-option>
   </ion-select>
+
+  <ion-buttons slot="end">
+    <ion-button
+      [color]="sortDirection === 'asc' ? 'primary' : 'medium'"
+      (click)="sortDirection = 'asc'; onSortDirectionChange()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </ion-button>
+    <ion-button
+      [color]="sortDirection === 'desc' ? 'primary' : 'medium'"
+      (click)="sortDirection = 'desc'; onSortDirectionChange()">
+      <ion-icon name="arrow-down"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-item>
 
   <div class="ion-text-center ion-padding" *ngIf="isLoading">
