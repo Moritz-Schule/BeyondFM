@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Search
+      BEYOND FM
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -60,21 +60,17 @@
 
   <!-- Ergebnisliste mit Paginierung -->
   <ion-list *ngIf="!isLoading && searchResults.length > 0">
-    <!-- Ändern Sie das ion-item in der Liste wie folgt: -->
-    <ion-item *ngFor="let station of paginatedResults" button detail (click)="onStationClick(station)">
-      <ion-thumbnail slot="start">
-        <img [src]="station.favicon || './assets/radio-placeholder.jpg'"
-             [alt]="station.name">
-      </ion-thumbnail>
-      <ion-label>
+    <div *ngFor="let station of paginatedResults; let i = index" class="station-card" (click)="onStationClick(station)">
+      <div class="rank-number">{{ i + 1 }}.</div>
+      <img class="station-logo" [src]="station.favicon || './assets/radio-placeholder.jpg'" [alt]="station.name" />
+      <div class="station-info">
         <h2>{{ station.name }}</h2>
         <p>{{ station.country }}</p>
-        <p class="ion-text-wrap">
-          <small>{{ formatTags(station.tags) }}</small>
-        </p>
-      </ion-label>
-    </ion-item>
+        <small>{{ formatTags(station.tags) }}</small>
+      </div>
+    </div>
   </ion-list>
+
 
   <!-- Paginierung -->
   <ion-footer *ngIf="!isLoading && searchResults.length > itemsPerPage">

@@ -1,26 +1,62 @@
-ion-thumbnail {
-  --size: 60px;
-
-  img {
-    border-radius: 4px;
-    object-fit: cover;
-  }
+ion-content {
+  --background: linear-gradient(to bottom, #000000, #8B0000); /* Schwarz zu Dunkelrot */
+  color: white;
+  padding: 10px;
 }
 
-ion-item {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
+ion-title {
+  text-align: center;
+  font-family: monospace;
+  font-size: 24px;
+  color: white;
 }
 
-.ion-text-center {
-  ion-icon {
-    font-size: 48px;
-    color: var(--ion-color-medium);
-  }
+ion-item, ion-select, ion-input {
+  --background: transparent;
+  color: white;
 }
 
-small {
-  color: var(--ion-color-medium);
+.station-card {
+  background: linear-gradient(to right, #b30000, #ff1a1a);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: white;
+  position: relative;
 }
+
+.station-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.station-info h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.station-info p, .station-info small {
+  margin: 0;
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+.rank-number {
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px #000;
+}
+
+
+

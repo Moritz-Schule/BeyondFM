@@ -1,15 +1,29 @@
+.abeezee-regular {
+  font-family: "ABeeZee", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.abeezee-regular-italic {
+  font-family: "ABeeZee", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+
+
 ion-title {
   text-align: center;
 
 }
 //flex-direction: inherit;
 ion-header {
-  background-color: black;
+  background-color: #181414;
 }
 
 
 h5 {
-
+  font-family: "ABeeZee", sans-serif;
   color: white;
 
   span {
@@ -22,6 +36,7 @@ h5 {
 ion-card-content {
   p {
     font-size: 28px;
+    font-family: "ABeeZee", sans-serif;
   }
 }
 
@@ -72,7 +87,7 @@ ion-card {
   width: 360px;
   height: 660px;
   justify-content: center;
-  background-color: black;
+  background-color: #181414;
 
 }
 
@@ -86,12 +101,12 @@ ion-card {
   padding: 0px;
   color: white;
   text-align: center;
-  background-color: black;
+  background-color: #181414;
 
 }
 
 .all {
-  background-color: black;
+  background-color: #181414;
 
 }
 

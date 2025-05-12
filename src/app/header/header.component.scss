@@ -1,6 +1,14 @@
 ion-title{
-
+  font-family: "Allerta Stencil", sans-serif;
   --color: #FF0900;
-  font-size: 34px;
-  background-color: black;
+  font-size: 50px;
+  background-color: #181414;
+  width: 100% !important;
+  padding-left: 45px;
 }
+.allerta-stencil-regular {
+  font-family: "Allerta Stencil", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
