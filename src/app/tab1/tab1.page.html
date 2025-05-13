@@ -37,7 +37,11 @@
           </ng-template>
         </ion-button>
         <div class="herz">
-          <ion-icon size="large" color="danger" name="heart-outline"></ion-icon>
+          <ion-icon
+            size="large"
+            color="danger"
+            [name]="isFavorite ? 'heart' : 'heart-outline'"
+            (click)="toggleFavorite()"></ion-icon>
         </div>
 
 
