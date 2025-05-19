@@ -33,6 +33,7 @@ import {NgForOf, NgIf} from "@angular/common";
     NgIf
   ]
 })
+
 export class Tab3Page implements OnInit {
   favorites: RadioStation[] = [];
 
