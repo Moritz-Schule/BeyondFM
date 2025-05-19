@@ -1,25 +1,29 @@
-import {Component} from '@angular/core';
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonItem,
-  IonInput,
-  IonIcon,
-  IonList,
-  IonLabel,
-  IonThumbnail,
-  IonSpinner, IonFooter, IonButtons, IonButton, IonSelect, IonSelectOption
-} from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { searchOutline, radioOutline, chevronForward, chevronBack, arrowUp, arrowDown } from 'ionicons/icons';
-import {RadioBrowserService} from "../services/radio-browser.service";
-import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor } from '@angular/common';
+import { Component } from '@angular/core';
+import { RadioBrowserService } from '../services/radio-browser.service';
 import { Router } from '@angular/router';
 import { StreamingService } from '../services/streaming.service';
-
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonSpinner,
+  IonThumbnail,
+  IonTitle,
+  IonToolbar
+} from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
+import { NgFor, NgIf } from '@angular/common';
+import { addIcons } from 'ionicons';
+import { searchOutline, radioOutline, chevronForward, chevronBack, arrowUp, arrowDown } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tab2',
@@ -30,12 +34,8 @@ import { StreamingService } from '../services/streaming.service';
     IonToolbar,
     IonTitle,
     IonContent,
-    IonItem,
     IonInput,
     IonIcon,
-    IonList,
-    IonLabel,
-    IonThumbnail,
     IonSpinner,
     FormsModule,
     NgIf,
@@ -52,9 +52,8 @@ export class Tab2Page {
   searchResults: any[] = [];
   isLoading: boolean = false;
   sortOrder: string = 'name';
-  sortDirection: string = 'asc'; // Neue Eigenschaft für die Sortierrichtung
-
-  // Rest des Codes bleibt unverändert
+  sortDirection: string = 'asc';
+  treatAsWhole: boolean = true; // Neue Option für die gepaarte Suche
 
   constructor(
     private radioBrowserService: RadioBrowserService,
@@ -71,7 +70,6 @@ export class Tab2Page {
     });
   }
 
-  // Paginierung
   itemsPerPage: number = 25;
   currentPage: number = 1;
 
@@ -98,45 +96,54 @@ export class Tab2Page {
   }
 
   onStationClick(station: any) {
+    if (!station.id) {
+      console.error('Station hat keine gültige ID:', station);
+      station.id = 'station_' + station.name.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now();
+      console.log('Generierte ID für Station:', station.id);
+    }
+
     this.streamingService.setCurrentStation(station);
     this.router.navigate(['/tabs/tab1']);
   }
 
   onSortChange() {
-    this.onSearch(); // Neue Suche mit aktualisierter Sortierung
+    this.onSearch();
   }
 
   onSortDirectionChange() {
-    this.onSearch(); // Neue Suche mit aktualisierter Sortierrichtung
+    this.onSearch();
   }
 
   onSearch() {
     if (this.searchTerm.trim()) {
       this.isLoading = true;
       this.currentPage = 1;
+
+      console.log('Suche nach:', this.searchTerm);
+
       this.radioBrowserService.getSearchResults(this.searchTerm, this.sortOrder, this.sortDirection).subscribe(
         results => {
           this.searchResults = results;
+          console.log('Gefundene Sender:', results.length);
           this.isLoading = false;
-          console.log('Gefundene Sender:', results);
         },
         error => {
           console.error('Fehler bei der Suche:', error);
           this.isLoading = false;
         }
       );
+    } else {
+      this.searchResults = [];
     }
   }
 
   formatTags(tags: string | string[]): string {
     if (!tags) return '';
 
-    // Wenn tags ein String ist, splitte es an Kommas
     if (typeof tags === 'string') {
       return tags.split(',').map(tag => tag.trim()).join(', ');
     }
 
-    // Wenn tags ein Array ist
     if (Array.isArray(tags)) {
       return tags.join(', ');
     }

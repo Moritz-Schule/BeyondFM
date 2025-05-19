@@ -122,36 +122,63 @@ export class RadioBrowserService {
    * @param searchTerm - Der Suchbegriff für die Radiosuche
    * @param sortOrder - Das Sortierfeld (z.B. 'name', 'bitrate', 'votes')
    * @param sortDirection - Die Sortierrichtung ('asc' für aufsteigend, 'desc' für absteigend)
+   * @param treatAsWhole - Wenn true, wird der Suchbegriff als ganzer behandelt, auch wenn er Leerzeichen enthält
    * @returns Observable<any[]> - Eine Liste der gefundenen Radiosender
    */
-  getSearchResults(searchTerm: string, sortOrder: string = 'name', sortDirection: string = 'asc'): Observable<any[]> {
-    // Umwandlung der Sortierrichtung in einen booleschen Wert für den API-Aufruf
+  getSearchResults(searchTerm: string, sortOrder: string = 'name', sortDirection: string = 'asc', treatAsWhole: boolean = false): Observable<any[]> {
     const isReverse = sortDirection === 'desc' ? 'true' : 'false';
+
+    if (!searchTerm.trim()) {
+      return of([]);
+    }
 
     if (!this.serverUrl) {
       return this.getRadiobrowserBaseUrlRandom().pipe(
         switchMap(baseUrl => {
-          const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
-          const url = `${baseUrl}/json/stations/search`;
-          return this.http.get<any[]>(url, {
-            params: {
-              name: encodedSearchTerm,
-              order: sortOrder,
-              reverse: isReverse,
-              limit: '100',
-              codec: 'mp3'
-            }
-          });
-        }),
-        catchError(error => {
-          console.error("Fehler beim Abrufen der Radiosender:", error);
-          return of([]);
+          return this.performSearch(baseUrl, searchTerm, sortOrder, isReverse);
         })
       );
     }
 
-    const encodedSearchTerm = encodeURIComponent(searchTerm.trim());
-    const url = `${this.serverUrl}/json/stations/search`;
+    return this.performSearch(this.serverUrl, searchTerm, sortOrder, isReverse);
+  }
+
+  /**
+   * Führt die eigentliche Suche durch und behandelt verschiedene Fehlerfälle
+   */
+  private performSearch(baseUrl: string, searchTerm: string, sortOrder: string, isReverse: string): Observable<any[]> {
+    // Suchanfrage vorbereiten: Leerzeichen behandeln und kodieren
+    const normalizedSearchTerm = searchTerm.trim();
+    const encodedSearchTerm = encodeURIComponent(normalizedSearchTerm);
+
+    console.log(`Suche nach "${normalizedSearchTerm}" (kodiert: ${encodedSearchTerm})`);
+
+    return this.searchByName(baseUrl, encodedSearchTerm, sortOrder, isReverse).pipe(
+      switchMap(results => {
+        if (results && results.length > 0) {
+          return of(results);
+        }
+
+        const alternativeSearchTerm = this.normalizeString(normalizedSearchTerm);
+        if (alternativeSearchTerm !== normalizedSearchTerm) {
+          console.log('Versuche alternative Suche ohne Umlaute:', alternativeSearchTerm);
+          return this.searchByName(baseUrl, encodeURIComponent(alternativeSearchTerm), sortOrder, isReverse);
+        }
+
+        return of([]);
+      }),
+      catchError(error => {
+        console.error("Fehler beim Abrufen der Radiosender:", error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Sucht nach Stationen anhand des Namens
+   */
+  private searchByName(baseUrl: string, encodedSearchTerm: string, sortOrder: string, isReverse: string): Observable<any[]> {
+    const url = `${baseUrl}/json/stations/search`;
 
     return this.http.get<any[]>(url, {
       params: {
@@ -162,10 +189,25 @@ export class RadioBrowserService {
         codec: 'mp3'
       }
     }).pipe(
-      catchError(error => {
-        console.error("Fehler beim Abrufen der Radiosender:", error);
-        return of([]);
-      })
+    catchError(error => {
+      console.error(`Fehler bei Suche nach Namen "${encodedSearchTerm}":`, error);
+      return of([]);
+    })
     );
+  }
+
+  /**
+   * Normalisiert einen String durch Entfernen von Umlauten und Sonderzeichen
+   * @param str - Der zu normalisierende String
+   * @returns Der normalisierte String
+   */
+  private normalizeString(str: string): string {
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[äÄ]/g, 'a')
+      .replace(/[öÖ]/g, 'o')
+      .replace(/[üÜ]/g, 'u')
+      .replace(/[ß]/g, 'ss');
   }
 }

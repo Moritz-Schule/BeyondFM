@@ -13,6 +13,8 @@ import {
   IonToolbar
 } from "@ionic/angular/standalone";
 import {NgForOf, NgIf} from "@angular/common";
+import { addIcons } from 'ionicons';
+import { heart, heartOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tab3',
@@ -41,7 +43,9 @@ export class Tab3Page implements OnInit {
     private databaseService: DatabaseService,
     private streamingService: StreamingService,
     private router: Router
-  ) {}
+  ) {
+  addIcons({ heart, heartOutline });
+}
 
   ngOnInit() {
     this.databaseService.favorites.subscribe(favs => {
