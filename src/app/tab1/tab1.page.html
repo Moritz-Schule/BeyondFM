@@ -27,7 +27,9 @@
       <div class="radioName">
         <div class="dotName">
           <div class="pulse-dot"></div>
-          <p>{{ radioStation.name }}</p>
+          <div class="marquee">
+            <div class="marquee-content">{{ radioStation.name }}</div>
+          </div>
         </div>
         <div class="herzButt">
           <ion-button (click)="radioInteract(radioStation.url)" shape="round" size="large" color="danger">

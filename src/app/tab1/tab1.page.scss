@@ -171,3 +171,35 @@ ion-header {
 
 }
 
+.marquee {
+  width: 200px;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: scrollMarquee 10s linear infinite;
+  animation-delay: 1s;
+  font-size: 24px;
+  font-family: "ABeeZee", sans-serif;
+  color: white;
+  white-space: nowrap;
+}
+
+
+@keyframes scrollMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  10% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
