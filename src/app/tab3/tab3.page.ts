@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService, RadioStation } from '../services/database.service';
 import { StreamingService } from '../services/streaming.service';
+import { Router } from '@angular/router';
 import {
   IonAvatar, IonButton,
   IonContent,
@@ -37,7 +38,8 @@ export class Tab3Page implements OnInit {
 
   constructor(
     private databaseService: DatabaseService,
-    private streamingService: StreamingService
+    private streamingService: StreamingService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -46,9 +48,12 @@ export class Tab3Page implements OnInit {
     });
   }
 
-  playStation(station: RadioStation) {
-    this.streamingService.playStream(station.url);
-  }
+playStation(station: RadioStation) {
+  // ID-Check sollte hier nicht mehr nötig sein, da die Favoriten bereits IDs haben sollten
+  this.streamingService.setCurrentStation(station);
+  this.streamingService.playStream(station.url);
+  this.router.navigate(['/tabs/tab1']);
+}
 
   async removeFavorite(event: Event, stationId: string) {
     event.stopPropagation();
@@ -62,4 +67,14 @@ export class Tab3Page implements OnInit {
     }
   }
 
+onStationClick(station: any) {
+  if (!station.id) {
+    console.error('Station hat keine gültige ID:', station);
+    station.id = 'station_' + Date.now();
+    console.log('Generierte ID für Station:', station.id);
+  }
+
+  this.streamingService.setCurrentStation(station);
+  this.router.navigate(['/tabs/tab1']);
+}
 }

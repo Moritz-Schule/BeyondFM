@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RadioBrowserService } from '../services/radio-browser.service';
 import {
   IonButton,
   IonCard, IonCardContent,
   IonCardHeader,
   IonCardTitle,
-  IonContent,
   IonHeader, IonIcon,
   IonTitle,
   IonToolbar,
@@ -16,6 +15,7 @@ import { playOutline, pauseOutline, heartOutline, heart } from 'ionicons/icons';
 import {NgIf} from "@angular/common";
 import {StreamingService} from "../services/streaming.service";
 import { DatabaseService } from '../services/database.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab1',
@@ -24,11 +24,12 @@ import { DatabaseService } from '../services/database.service';
   standalone: true,
   imports: [IonHeader, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, NgIf, IonIcon, HeaderComponent]
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit, OnDestroy {
   serverUrl: string = '';
   radioStation: any = null;
   audio: HTMLAudioElement | null = null;
   isFavorite = false;
+  private stationChangeSubscription: Subscription | null = null;
 
   constructor(
     private radioBrowserService: RadioBrowserService,
@@ -62,12 +63,30 @@ export class Tab1Page implements OnInit {
     } else if (!this.streamingService.getCurrentStation()) {
       this.loadRandomStation();
     }
+
+    // Abonnieren des stationChange-Observables, um auf Änderungen zu reagieren
+    this.stationChangeSubscription = this.streamingService.stationChange$.subscribe(station => {
+      if (station) {
+        this.radioStation = station;
+        this.updateFavoriteStatus(); // Favoriten-Status beim Senderwechsel aktualisieren
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    // Aufräumen des Abonnements, um Memory Leaks zu vermeiden
+    if (this.stationChangeSubscription) {
+      this.stationChangeSubscription.unsubscribe();
+      this.stationChangeSubscription = null;
+    }
   }
 
   loadRandomStation() {
     this.radioBrowserService.getRandomStationFromAustria().subscribe(station => {
       if (station) {
         this.radioStation = station;
+        this.streamingService.setCurrentStation(station); // Station auch im Service setzen
+        this.updateFavoriteStatus(); // Favoriten-Status aktualisieren
         console.log("Abspielender Sender:", station.name, station.url);
       } else {
         console.error("Keine Sender gefunden.");
@@ -81,7 +100,6 @@ export class Tab1Page implements OnInit {
     } else {
       this.streamingService.pauseStream();
     }
-
   }
 
   isPlaying(){
@@ -95,26 +113,43 @@ export class Tab1Page implements OnInit {
     }
   }
 
-    // Existierende Methoden...
-
   async toggleFavorite() {
-    if (!this.radioStation) return;
+    if (!this.radioStation) {
+      console.error('Keine Radiostation verfügbar für Favoriten-Toggle');
+      return;
+    }
 
-    if (await this.databaseService.isFavorite(this.radioStation.id)) {
+    // Sicherstellen, dass die Station eine ID hat
+    if (!this.radioStation.id) {
+      this.radioStation.id = 'station_' + this.radioStation.name.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now();
+      console.log('ID für Station generiert:', this.radioStation.id);
+    }
+
+    const isFav = await this.databaseService.isFavorite(this.radioStation.id);
+
+    if (isFav) {
       await this.databaseService.removeFavorite(this.radioStation.id);
       this.isFavorite = false;
+      console.log('Favorit entfernt für:', this.radioStation.name, '(ID:', this.radioStation.id, ')');
     } else {
       await this.databaseService.addFavorite(this.radioStation);
       this.isFavorite = true;
+      console.log('Favorit hinzugefügt für:', this.radioStation.name, '(ID:', this.radioStation.id, ')');
     }
   }
 
-  // Aktualisiere den Favoriten-Status, wenn sich die radioStation ändert
   async updateFavoriteStatus() {
-    if (this.radioStation) {
-      this.isFavorite = await this.databaseService.isFavorite(this.radioStation.id);
+    if (!this.radioStation) {
+      this.isFavorite = false;
+      return;
     }
-  }
 
-  // Andere Methoden...
+    if (!this.radioStation.id) {
+      this.radioStation.id = 'station_' + this.radioStation.name.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now();
+      console.log('ID für Station in updateFavoriteStatus generiert:', this.radioStation.id);
+    }
+
+    this.isFavorite = await this.databaseService.isFavorite(this.radioStation.id);
+    console.log('Favoriten-Status aktualisiert für:', this.radioStation.name, '(ID:', this.radioStation.id, ')', 'Ist Favorit:', this.isFavorite);
+  }
 }

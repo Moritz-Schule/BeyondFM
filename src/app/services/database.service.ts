@@ -78,6 +78,11 @@ export class DatabaseService {
 
   async removeFavorite(stationId: string) {
     try {
+      if (!stationId) {
+        console.error('Ungültige Station-ID beim Entfernen eines Favoriten');
+        return;
+      }
+
       if (!this._storageReady) {
         await this.init();
       }
@@ -87,7 +92,7 @@ export class DatabaseService {
 
       await this.storage.set('favorites', newFavorites);
       this._favorites.next(newFavorites);
-      console.log('Favorite removed, ID:', stationId);
+      console.log('Favorit entfernt, ID:', stationId);
     } catch (error) {
       console.error('Fehler beim Entfernen des Favoriten:', error);
     }
@@ -95,7 +100,15 @@ export class DatabaseService {
 
   async isFavorite(stationId: string): Promise<boolean> {
     try {
+      if (!stationId) {
+        return false;
+      }
+
       const favorites = this._favorites.value;
+      if (!favorites || favorites.length === 0) {
+        return false;
+      }
+
       return favorites.some(fav => fav.id === stationId);
     } catch (error) {
       console.error('Fehler bei der Favoriten-Prüfung:', error);
