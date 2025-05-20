@@ -10,11 +10,21 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonPopover,
+  IonSelect,
+  IonSelectOption, IonButtons
 } from "@ionic/angular/standalone";
 import {NgForOf, NgIf} from "@angular/common";
 import { addIcons } from 'ionicons';
-import { heart, heartOutline } from 'ionicons/icons';
+import { heart, heartOutline, listOutline, gridOutline, ellipsisVertical } from 'ionicons/icons';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-tab3',
@@ -32,20 +42,32 @@ import { heart, heartOutline } from 'ionicons/icons';
     IonButton,
     IonIcon,
     NgForOf,
-    NgIf
+    NgIf,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonPopover,
+    IonSelect,
+    IonSelectOption,
+    IonButtons,
+    FormsModule
   ]
 })
 
 export class Tab3Page implements OnInit {
   favorites: RadioStation[] = [];
+  viewMode: 'list' | 'grid' = 'list'; // Standardansicht ist Liste
 
   constructor(
     private databaseService: DatabaseService,
     private streamingService: StreamingService,
     private router: Router
   ) {
-  addIcons({ heart, heartOutline });
-}
+    addIcons({ heart, heartOutline, listOutline, gridOutline, ellipsisVertical });
+  }
 
   ngOnInit() {
     this.databaseService.favorites.subscribe(favs => {
@@ -53,12 +75,12 @@ export class Tab3Page implements OnInit {
     });
   }
 
-playStation(station: RadioStation) {
-  // ID-Check sollte hier nicht mehr nötig sein, da die Favoriten bereits IDs haben sollten
-  this.streamingService.setCurrentStation(station);
-  this.streamingService.playStream(station.url);
-  this.router.navigate(['/tabs/tab1']);
-}
+  playStation(station: RadioStation) {
+    // ID-Check sollte hier nicht mehr nötig sein, da die Favoriten bereits IDs haben sollten
+    this.streamingService.setCurrentStation(station);
+    this.streamingService.playStream(station.url);
+    this.router.navigate(['/tabs/tab1']);
+  }
 
   async removeFavorite(event: Event, stationId: string) {
     event.stopPropagation();
@@ -72,14 +94,19 @@ playStation(station: RadioStation) {
     }
   }
 
-onStationClick(station: any) {
-  if (!station.id) {
-    console.error('Station hat keine gültige ID:', station);
-    station.id = 'station_' + Date.now();
-    console.log('Generierte ID für Station:', station.id);
+  onStationClick(station: any) {
+    if (!station.id) {
+      console.error('Station hat keine gültige ID:', station);
+      station.id = 'station_' + Date.now();
+      console.log('Generierte ID für Station:', station.id);
+    }
+
+    this.streamingService.setCurrentStation(station);
+    this.router.navigate(['/tabs/tab1']);
   }
 
-  this.streamingService.setCurrentStation(station);
-  this.router.navigate(['/tabs/tab1']);
-}
+  // Methode zum Ändern der Ansicht
+  changeViewMode(event: CustomEvent) {
+    this.viewMode = event.detail.value;
+  }
 }

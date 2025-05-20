@@ -1,9 +1,25 @@
-<!-- tab3.page.html -->
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
       Library
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-select
+        interface="popover"
+        [(ngModel)]="viewMode"
+        (ionChange)="changeViewMode($event)"
+        aria-label="Ansicht wechseln">
+        <div slot="label">
+          <ion-icon [name]="viewMode === 'list' ? 'list-outline' : 'grid-outline'"></ion-icon>
+        </div>
+        <ion-select-option value="list">
+          <ion-icon name="list-outline"></ion-icon> List
+        </ion-select-option>
+        <ion-select-option value="grid">
+          <ion-icon name="grid-outline"></ion-icon> Grid
+        </ion-select-option>
+      </ion-select>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +35,8 @@
     <p>Gehe zu Tab 1 und füge Sender zu deinen Favoriten hinzu!</p>
   </div>
 
-  <ion-list>
+  <!-- Liste -->
+  <ion-list *ngIf="viewMode === 'list'">
     <ion-item *ngFor="let radioStation of favorites" (click)="playStation(radioStation)">
       <ion-avatar slot="start">
         <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
@@ -34,4 +51,28 @@
       </ion-button>
     </ion-item>
   </ion-list>
+
+  <!-- Grid -->
+  <ion-grid *ngIf="viewMode === 'grid'">
+    <ion-row>
+      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let radioStation of favorites">
+        <ion-card (click)="playStation(radioStation)">
+          <div class="card-image-container">
+            <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
+                 [alt]="'Logo von ' + radioStation.name"
+                 (error)="handleImageError($event)">
+          </div>
+          <ion-card-header>
+            <ion-card-title>{{ radioStation.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-button
+            class="favorite-button"
+            fill="clear"
+            (click)="removeFavorite($event, radioStation.id)">
+            <ion-icon name="heart" color="danger"></ion-icon>
+          </ion-button>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
