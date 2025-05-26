@@ -24,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { searchOutline, radioOutline, chevronForward, chevronBack, arrowUp, arrowDown } from 'ionicons/icons';
+import {HeaderComponent} from "../header/header.component";
 
 @Component({
   selector: 'app-tab2',
@@ -44,7 +45,8 @@ import { searchOutline, radioOutline, chevronForward, chevronBack, arrowUp, arro
     IonButtons,
     IonButton,
     IonSelect,
-    IonSelectOption
+    IonSelectOption,
+    HeaderComponent
   ]
 })
 export class Tab2Page {
