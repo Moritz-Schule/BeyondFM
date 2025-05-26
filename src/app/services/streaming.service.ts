@@ -42,4 +42,8 @@ export class StreamingService {
   isPlaying(): boolean {
     return !this.audio.paused;
   }
+
+
 }
+
+

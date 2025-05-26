@@ -68,7 +68,7 @@
 
   <div *ngIf="!isLoading && searchResults.length > 0">
     <div *ngFor="let station of paginatedResults; let i = index" class="station-card" (click)="onStationClick(station)">
-      <div class="rank-number">{{ i + 1 }}.</div>
+
       <img class="station-logo" [src]="station.favicon || './assets/radio-placeholder.jpg'" [alt]="station.name" />
       <div class="station-info">
         <h2>{{ station.name }}</h2>
