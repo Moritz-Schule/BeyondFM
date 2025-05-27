@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { AppInitializer } from './app-initializer';
+import { Component } from '@angular/core';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  standalone: true,
-  imports: [IonApp, IonRouterOutlet],
+  styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  constructor(private appInitializer: AppInitializer) {}
+export class AppComponent {
+  constructor(private platform: Platform) {
+    this.initializeApp();
+  }
 
-  async ngOnInit() {
-    await this.appInitializer.initialize();
+  initializeApp() {
+    // Force dark mode
+    document.body.classList.add('dark');
   }
 }
