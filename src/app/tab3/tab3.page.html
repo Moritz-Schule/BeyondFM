@@ -1,57 +1,60 @@
 <ion-header [translucent]="true">
-  <app-header />
+  <app-header/>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="library-header">
-    <h2>Your Library</h2>
-    <div class="view-toggle">
-      <ion-button
-        [color]="viewMode === 'grid' ? 'danger' : 'light'"
-        (click)="viewMode = 'grid'">
-        Symbol
-      </ion-button>
-      <ion-button
-        [color]="viewMode === 'list' ? 'danger' : 'light'"
-        (click)="viewMode = 'list'">
-        List
-      </ion-button>
+  <div class="body">
+    <div class="library-header">
+      <h2>Your Library</h2>
+      <div class="view-toggle">
+        <ion-button
+          [class.button-light]="viewMode !== 'grid'"
+          (click)="viewMode = 'grid'">
+          Symbol
+        </ion-button>
+        <ion-button
+          [class.button-light]="viewMode !== 'list'"
+          (click)="viewMode = 'list'">
+          List
+        </ion-button>
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="favorites.length === 0" class="empty-favorites">
-    <p>Du hast noch keine Favoriten hinzugefügt.</p>
-    <p>Gehe zu Tab 1 und füge Sender zu deinen Favoriten hinzu!</p>
-  </div>
 
-  <!-- Grid View -->
-  <ion-grid *ngIf="viewMode === 'grid'">
-    <ion-row>
-      <ion-col size="4" *ngFor="let radioStation of favorites">
-        <div class="station-tile" (click)="playStation(radioStation)">
+    <div *ngIf="favorites.length === 0" class="empty-favorites">
+      <p>Du hast noch keine Favoriten hinzugefügt.</p>
+      <p>Gehe zu Tab 1 und füge Sender zu deinen Favoriten hinzu!</p>
+    </div>
+
+    <!-- Grid View -->
+    <ion-grid *ngIf="viewMode === 'grid'">
+      <ion-row>
+        <ion-col size="4" *ngFor="let radioStation of favorites">
+          <div class="station-tile" (click)="playStation(radioStation)">
+            <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
+                 [alt]="'Logo von ' + radioStation.name"
+                 (error)="handleImageError($event)">
+            <div class="station-name">{{ radioStation.name }}</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- List View -->
+    <ion-list *ngIf="viewMode === 'list'">
+      <ion-item *ngFor="let radioStation of favorites" (click)="playStation(radioStation)">
+        <ion-avatar slot="start">
           <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
                [alt]="'Logo von ' + radioStation.name"
                (error)="handleImageError($event)">
-          <div class="station-name">{{ radioStation.name }}</div>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- List View -->
-  <ion-list *ngIf="viewMode === 'list'">
-    <ion-item *ngFor="let radioStation of favorites" (click)="playStation(radioStation)">
-      <ion-avatar slot="start">
-        <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
-             [alt]="'Logo von ' + radioStation.name"
-             (error)="handleImageError($event)">
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ radioStation.name }}</h2>
-      </ion-label>
-      <ion-button slot="end" fill="clear" (click)="removeFavorite($event, radioStation.id)">
-        <ion-icon name="heart" color="danger"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ radioStation.name }}</h2>
+        </ion-label>
+        <ion-button slot="end" fill="clear" (click)="removeFavorite($event, radioStation.id)">
+          <ion-icon name="heart" color="danger"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

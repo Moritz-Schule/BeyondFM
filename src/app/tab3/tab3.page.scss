@@ -1,50 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital,wght@0,400;1,400&display=swap');
+
+:host {
+  font-family: "ABeeZee", sans-serif;
+}
+
+.body{
+  background-color: #181414;
+}
+
+ion-header {
+  background-color: #181414;
+  margin-top: 30px;
+}
+
+ion-title {
+  text-align: center;
+  font-family: "ABeeZee", sans-serif;
+  color: red;
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+// Bereich „Your Library“ + Ansicht-Umschalter
 .library-header {
   text-align: center;
   margin-top: 1rem;
 
   h2 {
     color: red;
-    font-size: 1.3rem;
+    font-family: "ABeeZee", sans-serif;
+    font-size: 20px;
     margin-bottom: 0.5rem;
   }
 
   .view-toggle {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 1rem;
 
     ion-button {
-      --border-radius: 10px;
-      --padding-top: 4px;
-      --padding-bottom: 4px;
-      font-weight: bold;
-      min-width: 90px;
+      font-family: "ABeeZee", sans-serif;
+      font-size: 14px;
+      border-radius: 12px;
+      --background: #FF0900;
+      color: white;
+
+      &.button-light {
+        --background: white;
+        color: #181414;
+      }
     }
   }
 }
 
+// Gitterkacheln für Radiosender
 .station-tile {
+  background-color: #ffffff;
+  border-radius: 32px;
+  padding: 12px;
+  margin: 10px auto;
+  max-width: 110px;
+  box-shadow: 0 0 30px #FF0900;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px;
-  padding: 10px;
-  background: #121212;
-  border-radius: 12px;
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
 
   img {
-    width: 100%;
+    width: 80px;
     height: 80px;
     object-fit: contain;
     background-color: #fff;
-    border-radius: 8px;
+    border-radius: 16px;
   }
 
   .station-name {
-    margin-top: 8px;
+    margin-top: 10px;
     text-align: center;
     font-size: 14px;
-    color: #fff;
+    font-family: "ABeeZee", sans-serif;
+    color: black;
+    font-weight: 400;
   }
+}
+
+// Leerer Favoritenbereich
+.empty-favorites {
+  text-align: center;
+  padding: 2rem;
+  color: #aaa;
+  font-family: "ABeeZee", sans-serif;
+}
+
+// Listendarstellung (optional angepasst)
+ion-item {
+  background-color: #181414;
+  color: white;
+
+  ion-label {
+    font-family: "ABeeZee", sans-serif;
+  }
+
+  ion-icon {
+    color: #FF0900;
+  }
+}
+
+ion-avatar img {
+  border-radius: 8px;
 }
