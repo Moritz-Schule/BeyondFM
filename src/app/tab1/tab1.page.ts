@@ -29,6 +29,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   radioStation: any = null;
   audio: HTMLAudioElement | null = null;
   isFavorite = false;
+  stationSource: 'random' | 'search' | 'library' | null = null;
   private stationChangeSubscription: Subscription | null = null;
 
   constructor(
@@ -40,11 +41,11 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    // Prüfen und Aktualisieren der Station beim Betreten der Seite
     const selectedStation = this.streamingService.getCurrentStation();
     if (selectedStation) {
       this.radioStation = selectedStation;
-      this.updateFavoriteStatus(); // Favoriten-Status aktualisieren
+      this.stationSource = this.streamingService.getCurrentStationSource();
+      this.updateFavoriteStatus();
     }
   }
 
@@ -55,7 +56,6 @@ export class Tab1Page implements OnInit, OnDestroy {
       this.radioBrowserService.getRadiobrowserBaseUrlRandom().subscribe(url => {
         this.radioBrowserService.setServerUrl(url);
         this.serverUrl = url;
-        // Nur eine zufällige Station laden, wenn keine ausgewählte Station existiert
         if (!this.streamingService.getCurrentStation()) {
           this.loadRandomStation();
         }
@@ -64,17 +64,16 @@ export class Tab1Page implements OnInit, OnDestroy {
       this.loadRandomStation();
     }
 
-    // Abonnieren des stationChange-Observables, um auf Änderungen zu reagieren
     this.stationChangeSubscription = this.streamingService.stationChange$.subscribe(station => {
       if (station) {
         this.radioStation = station;
-        this.updateFavoriteStatus(); // Favoriten-Status beim Senderwechsel aktualisieren
+        this.stationSource = this.streamingService.getCurrentStationSource();
+        this.updateFavoriteStatus();
       }
     });
   }
 
   ngOnDestroy() {
-    // Aufräumen des Abonnements, um Memory Leaks zu vermeiden
     if (this.stationChangeSubscription) {
       this.stationChangeSubscription.unsubscribe();
       this.stationChangeSubscription = null;
@@ -85,8 +84,9 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.radioBrowserService.getRandomStationFromAustria().subscribe(station => {
       if (station) {
         this.radioStation = station;
-        this.streamingService.setCurrentStation(station); // Station auch im Service setzen
-        this.updateFavoriteStatus(); // Favoriten-Status aktualisieren
+        this.stationSource = 'random';
+        this.streamingService.setCurrentStation(station, 'random');
+        this.updateFavoriteStatus();
         console.log("Abspielender Sender:", station.name, station.url);
       } else {
         console.error("Keine Sender gefunden.");
@@ -119,7 +119,6 @@ export class Tab1Page implements OnInit, OnDestroy {
       return;
     }
 
-    // Sicherstellen, dass die Station eine ID hat
     if (!this.radioStation.id) {
       this.radioStation.id = 'station_' + this.radioStation.name.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now();
       console.log('ID für Station generiert:', this.radioStation.id);

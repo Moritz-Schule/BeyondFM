@@ -7,8 +7,13 @@
     <ion-card-header>
       <ion-card-title></ion-card-title>
     </ion-card-header>
-    <h5>Playing from Library: <br>
-      <span>{{ radioStation.name }}</span></h5> <br> <br>
+    <h5>
+      Playing from
+      <span *ngIf="stationSource === 'random'">Random Station</span>
+      <span *ngIf="stationSource === 'search'">Search</span>
+      <span *ngIf="stationSource === 'library'">Library</span>
+      <br>
+    </h5><br> <br>
     <div class="image-wrapper">
       <img [src]="radioStation.favicon || './assets/radio-placeholder.jpg'"
            [alt]="'Logo von ' + radioStation.name"

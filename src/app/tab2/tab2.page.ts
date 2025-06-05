@@ -55,7 +55,7 @@ export class Tab2Page {
   isLoading: boolean = false;
   sortOrder: string = 'name';
   sortDirection: string = 'asc';
-  treatAsWhole: boolean = true; // Neue Option für die gepaarte Suche
+  treatAsWhole: boolean = true;
 
   constructor(
     private radioBrowserService: RadioBrowserService,
@@ -99,12 +99,9 @@ export class Tab2Page {
 
   onStationClick(station: any) {
     if (!station.id) {
-      console.error('Station hat keine gültige ID:', station);
       station.id = 'station_' + station.name.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now();
-      console.log('Generierte ID für Station:', station.id);
     }
-
-    this.streamingService.setCurrentStation(station);
+    this.streamingService.setCurrentStation(station, 'search');
     this.router.navigate(['/tabs/tab1']);
   }
 
@@ -121,12 +118,9 @@ export class Tab2Page {
       this.isLoading = true;
       this.currentPage = 1;
 
-      console.log('Suche nach:', this.searchTerm);
-
       this.radioBrowserService.getSearchResults(this.searchTerm, this.sortOrder, this.sortDirection).subscribe(
         results => {
           this.searchResults = results;
-          console.log('Gefundene Sender:', results.length);
           this.isLoading = false;
         },
         error => {
