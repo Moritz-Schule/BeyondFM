@@ -17,8 +17,8 @@ export class RadioBrowserService {
    * @returns Observable<string[]> - Eine Liste von Server-URLs.
    */
   getRadiobrowserBaseUrls(): Observable<string[]> {
-    //const url = 'https://all.api.radio-browser.info/json/servers';
-    const url = 'https://de1.api.radio-browser.info/json/servers';
+    const url = 'https://all.api.radio-browser.info/json/servers';
+    //const url = 'https://de1.api.radio-browser.info/json/servers';
     return this.http.get<any[]>(url).pipe(
       map((response) => {
         return response.map(x => 'https://' + x.name);
