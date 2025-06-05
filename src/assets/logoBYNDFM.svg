@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #730d0d;
+      }
+
+      .cls-1, .cls-3 {
+        stroke: #f2f2f2;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-4 {
+        fill: #f20505;
+      }
+
+      .cls-3 {
+        fill: #0d0b0b;
+      }
+    </style>
+  </defs>
+  <g id="Rectangle">
+    <rect id="path-1" class="cls-2" width="128" height="128"/>
+  </g>
+  <circle id="Oval" class="cls-3" cx="65.17" cy="64" r="48.67"/>
+  <g>
+    <path id="Shape" class="cls-1" d="M50.96,37.48h0s-3.68-2.24-3.68-2.24c-1.03-.63-1.66-1.75-1.66-2.96v-5.89h.01s0,0,0,0c-3.7,1.76-7.17,4.16-10.23,7.22s-5.47,6.53-7.22,10.23l.14.07h5.69c1.21,0,2.33.63,2.96,1.66l1.98,3.25c.12.19.28.34.49.44l21.66,10.43.38-.39-10.5-21.81Z"/>
+    <path id="Shape-2" data-name="Shape" class="cls-1" d="M79.58,89.5h0s3.68,2.24,3.68,2.24c1.03.63,1.66,1.75,1.66,2.96v5.89h0s0,0,0,0c3.7-1.76,7.17-4.16,10.23-7.22,3.06-3.06,5.47-6.53,7.22-10.23l-.14-.07h-5.68c-1.21,0-2.33-.63-2.96-1.66l-1.98-3.25c-.12-.19-.28-.34-.49-.44l-21.66-10.43-.39.39,10.5,21.81Z"/>
+  </g>
+  <circle id="Oval-2" data-name="Oval" class="cls-4" cx="65.17" cy="63.88" r="20.52"/>
+  <circle id="Oval-3" data-name="Oval" class="cls-2" cx="65.17" cy="63.88" r="7.13"/>
+</svg>
