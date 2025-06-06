@@ -70,6 +70,7 @@ export class Tab2Page {
       arrowUp,
       arrowDown
     });
+    this.loadAllStations();
   }
 
   itemsPerPage: number = 25;
@@ -105,12 +106,21 @@ export class Tab2Page {
     this.router.navigate(['/tabs/tab1']);
   }
 
-  onSortChange() {
-    this.onSearch();
-  }
+  loadAllStations() {
+    this.isLoading = true;
+    this.currentPage = 1;
 
-  onSortDirectionChange() {
-    this.onSearch();
+    this.radioBrowserService.getAllStations(this.sortOrder, this.sortDirection).subscribe(
+      results => {
+        this.searchResults = results;
+        this.isLoading = false;
+      },
+      error => {
+        console.error('Fehler beim Laden aller Sender:', error);
+        this.isLoading = false;
+        this.searchResults = [];
+      }
+    );
   }
 
   onSearch() {
@@ -129,7 +139,23 @@ export class Tab2Page {
         }
       );
     } else {
-      this.searchResults = [];
+      this.loadAllStations();
+    }
+  }
+
+  onSortChange() {
+    if (this.searchTerm.trim()) {
+      this.onSearch();
+    } else {
+      this.loadAllStations();
+    }
+  }
+
+  onSortDirectionChange() {
+    if (this.searchTerm.trim()) {
+      this.onSearch();
+    } else {
+      this.loadAllStations();
     }
   }
 

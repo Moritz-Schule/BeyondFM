@@ -12,13 +12,8 @@ export class RadioBrowserService {
   constructor(private http: HttpClient) {
   }
 
-  /**
-   * Ruft die Liste aller verfügbaren Server ab.
-   * @returns Observable<string[]> - Eine Liste von Server-URLs.
-   */
   getRadiobrowserBaseUrls(): Observable<string[]> {
     const url = 'https://all.api.radio-browser.info/json/servers';
-    //const url = 'https://de1.api.radio-browser.info/json/servers';
     return this.http.get<any[]>(url).pipe(
       map((response) => {
         return response.map(x => 'https://' + x.name);
@@ -26,38 +21,20 @@ export class RadioBrowserService {
     );
   }
 
-  /**
-   * Ruft die Server-Konfiguration eines bestimmten Servers ab.
-   * @param baseurl - Die Basis-URL des Servers.
-   * @returns Observable<any> - Die Server-Konfiguration.
-   */
   getRadiobrowserServerConfig(baseurl: string): Observable<any> {
     const url = `${baseurl}/json/config`;
     return this.http.get<any>(url);
   }
 
-  /**
-   * Setzt die gespeicherte Server-URL.
-   * @param url - Die URL des Servers.
-   */
   setServerUrl(url: string): void {
     this.serverUrl = url;
   }
 
-  /**
-   * Ruft die gespeicherte Server-URL ab.
-   * @returns string - Die aktuelle Server-URL.
-   */
   getServerUrl(): string {
     console.log("Server Url: ", this.serverUrl);
     return this.serverUrl;
   }
 
-  /**
-   * Überprüft, ob ein Server erreichbar ist.
-   * @param baseurl - Die Basis-URL des Servers.
-   * @returns Observable<boolean> - Gibt 'true' zurück, wenn der Server erreichbar ist.
-   */
   checkServerAvailability(baseurl: string): Observable<boolean> {
     return this.http.get(`${baseurl}/json/config`).pipe(
       map(() => true),
@@ -65,20 +42,15 @@ export class RadioBrowserService {
     );
   }
 
-  /**
-   * Ruft zufällig einen verfügbaren Radio-Browser-Server ab und prüft, ob er erreichbar ist.
-   * @returns Observable<string> - Eine zufällige Server-URL.
-   */
   getRadiobrowserBaseUrlRandom(): Observable<string> {
     return this.getRadiobrowserBaseUrls().pipe(
       map((hosts) => {
         const randomIndex = Math.floor(Math.random() * hosts.length);
         const randomHost = hosts[randomIndex];
 
-        // Überprüfen, ob der zufällige Server erreichbar ist
         this.checkServerAvailability(randomHost).subscribe(isAvailable => {
           if (isAvailable) {
-            this.setServerUrl(randomHost); // Speichern der URL, wenn sie erreichbar ist
+            this.setServerUrl(randomHost);
           } else {
             console.log(`Server ${randomHost} ist nicht erreichbar.`);
           }
@@ -89,27 +61,21 @@ export class RadioBrowserService {
     );
   }
 
-  /**
-   * Holt eine Liste aller Radiosender aus Österreich.
-   */
   getStationsFromAustria(): Observable<any[]> {
     const url = `${this.getServerUrl()}/json/stations/bycountry/Austria`;
     return this.http.get<any[]>(url).pipe(
       catchError(error => {
         console.error("Fehler beim Abrufen der Radiosender:", error);
-        return of([]); // Leeres Array zurückgeben bei Fehler
+        return of([]);
       })
     );
   }
 
-  /**
-   * Holt einen zufälligen Sender aus Österreich.
-   */
   getRandomStationFromAustria(): Observable<any> {
     return this.getStationsFromAustria().pipe(
       map(stations => {
         if (stations.length === 0) {
-          return null; // Falls keine Sender verfügbar sind
+          return null;
         }
         const randomIndex = Math.floor(Math.random() * stations.length);
         return stations[randomIndex];
@@ -117,14 +83,44 @@ export class RadioBrowserService {
     );
   }
 
-  /**
-   * Sucht nach Radiosendern basierend auf einem Suchbegriff.
-   * @param searchTerm - Der Suchbegriff für die Radiosuche
-   * @param sortOrder - Das Sortierfeld (z.B. 'name', 'bitrate', 'votes')
-   * @param sortDirection - Die Sortierrichtung ('asc' für aufsteigend, 'desc' für absteigend)
-   * @param treatAsWhole - Wenn true, wird der Suchbegriff als ganzer behandelt, auch wenn er Leerzeichen enthält
-   * @returns Observable<any[]> - Eine Liste der gefundenen Radiosender
-   */
+  getAllStations(sortOrder: string = 'name', sortDirection: string = 'asc'): Observable<any[]> {
+    const isReverse = sortDirection === 'desc' ? 'true' : 'false';
+
+    if (!this.serverUrl) {
+      return this.getRadiobrowserBaseUrlRandom().pipe(
+        switchMap(baseUrl => {
+          return this.http.get<any[]>(`${baseUrl}/json/stations`, {
+            params: {
+              order: sortOrder,
+              reverse: isReverse,
+              limit: '1000',
+              hidebroken: 'true'
+            }
+          }).pipe(
+            catchError(error => {
+              console.error("Fehler beim Abrufen aller Radiosender:", error);
+              return of([]);
+            })
+          );
+        })
+      );
+    }
+
+    return this.http.get<any[]>(`${this.serverUrl}/json/stations`, {
+      params: {
+        order: sortOrder,
+        reverse: isReverse,
+        limit: '1000',
+        hidebroken: 'true'
+      }
+    }).pipe(
+      catchError(error => {
+        console.error("Fehler beim Abrufen aller Radiosender:", error);
+        return of([]);
+      })
+    );
+  }
+
   getSearchResults(searchTerm: string, sortOrder: string = 'name', sortDirection: string = 'asc', treatAsWhole: boolean = false): Observable<any[]> {
     const isReverse = sortDirection === 'desc' ? 'true' : 'false';
 
@@ -143,11 +139,7 @@ export class RadioBrowserService {
     return this.performSearch(this.serverUrl, searchTerm, sortOrder, isReverse);
   }
 
-  /**
-   * Führt die eigentliche Suche durch und behandelt verschiedene Fehlerfälle
-   */
   private performSearch(baseUrl: string, searchTerm: string, sortOrder: string, isReverse: string): Observable<any[]> {
-    // Suchanfrage vorbereiten: Leerzeichen behandeln und kodieren
     const normalizedSearchTerm = searchTerm.trim();
     const encodedSearchTerm = encodeURIComponent(normalizedSearchTerm);
 
@@ -174,9 +166,6 @@ export class RadioBrowserService {
     );
   }
 
-  /**
-   * Sucht nach Stationen anhand des Namens
-   */
   private searchByName(baseUrl: string, encodedSearchTerm: string, sortOrder: string, isReverse: string): Observable<any[]> {
     const url = `${baseUrl}/json/stations/search`;
 
@@ -189,18 +178,13 @@ export class RadioBrowserService {
         codec: 'mp3'
       }
     }).pipe(
-    catchError(error => {
-      console.error(`Fehler bei Suche nach Namen "${encodedSearchTerm}":`, error);
-      return of([]);
-    })
+      catchError(error => {
+        console.error(`Fehler bei Suche nach Namen "${encodedSearchTerm}":`, error);
+        return of([]);
+      })
     );
   }
 
-  /**
-   * Normalisiert einen String durch Entfernen von Umlauten und Sonderzeichen
-   * @param str - Der zu normalisierende String
-   * @returns Der normalisierte String
-   */
   private normalizeString(str: string): string {
     return str
       .normalize('NFD')
