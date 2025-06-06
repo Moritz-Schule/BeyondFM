@@ -1,9 +1,30 @@
-
-
-ion-tab-bar{
-  background-color: #181414;
-}
-ion-tab-button{
-  background-color: #181414;
+ion-tab-bar {
+  --background: #181414;
+  border-top: none;
 }
 
+ion-tab-button {
+  --ripple-color: #FF0900;
+
+  &::before {
+    background: #FF0900;
+  }
+
+  &.tab-selected {
+    ion-icon, ion-label {
+      color: #FF0900 !important;
+    }
+  }
+
+  &:not(.tab-selected) {
+    ion-icon, ion-label {
+      color: #ffffff !important;
+    }
+  }
+
+  &:hover {
+    ion-icon, ion-label {
+      opacity: 0.8;
+    }
+  }
+}
