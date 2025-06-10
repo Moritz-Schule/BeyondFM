@@ -4,8 +4,13 @@
   font-family: "ABeeZee", sans-serif;
 }
 
-.body{
+ion-content {
+  --background: #181414;
+}
+
+.body {
   background-color: #181414;
+  min-height: 100%;
 }
 
 ion-header {
@@ -22,7 +27,6 @@ ion-title {
   letter-spacing: 2px;
 }
 
-// Bereich „Your Library“ + Ansicht-Umschalter
 .library-header {
   text-align: center;
   margin-top: 1rem;
@@ -55,7 +59,6 @@ ion-title {
   }
 }
 
-// Gitterkacheln für Radiosender
 .station-tile {
   background-color: #ffffff;
   border-radius: 32px;
@@ -85,7 +88,6 @@ ion-title {
   }
 }
 
-// Leerer Favoritenbereich
 .empty-favorites {
   text-align: center;
   padding: 2rem;
@@ -93,17 +95,51 @@ ion-title {
   font-family: "ABeeZee", sans-serif;
 }
 
-// Listendarstellung (optional angepasst)
+ion-list {
+  background: transparent;
+}
+
 ion-item {
+  --background: rgba(255, 9, 0, 0.1);
+  --border-color: #FF0900;
+  --border-style: solid;
+  --border-width: 1px;
+  --border-radius: 10px;
+  margin: 8px 16px;
+
   ion-label {
     font-family: "ABeeZee", sans-serif;
+    h2 {
+      color: white;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
   }
 
+  ion-avatar {
+    --border-radius: 8px;
+    width: 45px;
+    height: 45px;
+    border: 1px solid #FF0900;
+  }
+
+  &:hover {
+    --background: rgba(255, 9, 0, 0.2);
+    cursor: pointer;
+  }
+}
+
+ion-button[slot="end"] {
+  --padding-start: 8px;
+  --padding-end: 8px;
+
   ion-icon {
+    font-size: 20px;
     color: #FF0900;
   }
 }
 
-ion-avatar img {
-  border-radius: 8px;
+ion-list {
+  padding: 8px 0;
 }
